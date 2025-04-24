@@ -4,8 +4,9 @@ Viewzenix Flask Webhook API
 This module initializes the Flask application for the Viewzenix trading webhook platform.
 """
 import os
-from flask import Flask
+from flask import Flask, jsonify
 from flask_cors import CORS
+from flask_swagger_ui import get_swaggerui_blueprint
 from loguru import logger
 from dotenv import load_dotenv
 
@@ -53,6 +54,30 @@ def create_app(test_config=None):
     app.register_blueprint(status.bp)
     app.register_blueprint(cleanup.bp)
     app.register_blueprint(bot_state.bp)
+    
+    # Register Swagger UI blueprint
+    from .swagger.spec import SWAGGER_SPEC
+    
+    # Endpoint for Swagger specification
+    @app.route('/api/swagger.json')
+    def swagger_spec():
+        """Return the Swagger specification."""
+        return jsonify(SWAGGER_SPEC)
+    
+    # Configure Swagger UI
+    SWAGGER_URL = '/api/docs'  # URL for exposing Swagger UI
+    API_URL = '/api/swagger.json'  # URL for the Swagger spec
+    
+    swaggerui_blueprint = get_swaggerui_blueprint(
+        SWAGGER_URL,
+        API_URL,
+        config={
+            'app_name': "Viewzenix Webhook API Documentation"
+        }
+    )
+    
+    app.register_blueprint(swaggerui_blueprint, url_prefix=SWAGGER_URL)
+    logger.info(f"Swagger UI available at {SWAGGER_URL}")
     
     # Simple index route
     @app.route('/')

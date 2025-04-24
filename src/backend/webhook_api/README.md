@@ -25,6 +25,9 @@ webhook_api/
 │   └── order_calculator.py # Order size calculation
 ├── schema/              # Input validation schemas
 │   └── tradingview_alert.py # TradingView alert schema
+├── swagger/             # API documentation
+│   ├── __init__.py
+│   └── spec.py          # OpenAPI specification
 ├── utils/               # Utility functions
 └── tests/               # Test directory
     └── test_webhook.py  # API tests
@@ -73,6 +76,24 @@ python -m flask run --host=0.0.0.0 --port=5000
 Or run directly:
 ```bash
 python app.py
+```
+
+## API Documentation
+
+The API is documented using OpenAPI/Swagger specification. You can access the API documentation at:
+
+```
+http://localhost:5000/api/docs
+```
+
+This provides an interactive documentation interface where you can:
+- View all available endpoints
+- See request/response schemas
+- Test API calls directly from the browser
+
+The raw OpenAPI specification is available at:
+```
+http://localhost:5000/api/swagger.json
 ```
 
 ## API Endpoints
