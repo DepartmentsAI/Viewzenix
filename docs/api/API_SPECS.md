@@ -6,6 +6,7 @@ This document outlines the RESTful API endpoints for the Viewzenix application.
 
 - Development: `http://localhost:3001/api/v1`
 - Production: [To be determined]
+- Trading Webhook: `http://localhost:5000/webhook` (Flask)
 
 ## Authentication
 
@@ -159,6 +160,147 @@ Updates the authenticated user's profile.
     "email": "updated@example.com",
     "name": "John Updated Doe",
     "updatedAt": "2023-04-02T12:00:00Z"
+  }
+}
+```
+
+### Trading Webhook API (Flask)
+
+#### POST /webhook
+Receives TradingView webhook alerts and processes trading signals.
+
+**Request Body (from TradingView):**
+```json
+{
+  "symbol": "BTCUSD",
+  "strategy_order_id": "long",
+  "strategy_order_action": "buy",
+  "strategy_order_contracts": 0.05,
+  "strategy_order_price": 64340.15,
+  "strategy_order_comment": "Breakout",
+  "time": 1713746400000
+}
+```
+
+**Response (200 OK):**
+```json
+{
+  "success": true,
+  "data": {
+    "received": true,
+    "order_id": "alpaca-12345678",
+    "symbol": "BTCUSD",
+    "order_type": "market",
+    "side": "buy",
+    "quantity": 0.05,
+    "timestamp": 1713746400120
+  }
+}
+```
+
+#### GET /status
+Retrieves the current status of the trading system.
+
+**Response (200 OK):**
+```json
+{
+  "success": true,
+  "data": {
+    "status": "active",
+    "broker_connected": true,
+    "positions_count": 3,
+    "open_orders_count": 5,
+    "global_sl_tp_active": true,
+    "base_equity": 100000,
+    "current_equity": 103500,
+    "uptime": "3d 5h 12m"
+  }
+}
+```
+
+#### POST /cleanup
+Manually triggers the cleanup process for orphaned orders.
+
+**Response (200 OK):**
+```json
+{
+  "success": true,
+  "data": {
+    "cleaned_orders": 2,
+    "orphaned_sl_orders": 1,
+    "orphaned_tp_orders": 1,
+    "timestamp": 1713746500000
+  }
+}
+```
+
+#### GET /orders
+Retrieves the list of recent orders.
+
+**Query Parameters:**
+- `limit`: Maximum number of orders to return (default: 50)
+- `offset`: Number of orders to skip (default: 0)
+- `status`: Filter by order status (open, filled, canceled)
+
+**Response (200 OK):**
+```json
+{
+  "success": true,
+  "data": [
+    {
+      "order_id": "alpaca-12345678",
+      "client_order_id": "bot1-1713746400000-uuid123",
+      "symbol": "BTCUSD",
+      "side": "buy",
+      "quantity": 0.05,
+      "order_type": "market",
+      "status": "filled",
+      "filled_price": 64338.50,
+      "created_at": "2023-04-22T10:20:00Z",
+      "updated_at": "2023-04-22T10:20:02Z",
+      "has_sl_tp": true
+    }
+  ],
+  "meta": {
+    "pagination": {
+      "total": 120,
+      "limit": 50,
+      "offset": 0
+    }
+  }
+}
+```
+
+#### PUT /bot_state
+Updates the active state of a trading bot.
+
+**Request Body:**
+```json
+{
+  "bot_id": "bot1",
+  "active": true,
+  "config": {
+    "base_order_pct": 0.02,
+    "use_limit_orders": false,
+    "attach_sl_tp": true,
+    "sl_pct": 0.01,
+    "tp_pct": 0.02,
+    "enable_global_sl_tp": true,
+    "global_sl_pct": 0.80,
+    "global_tp_pct": 1.20
+  }
+}
+```
+
+**Response (200 OK):**
+```json
+{
+  "success": true,
+  "data": {
+    "bot_id": "bot1",
+    "active": true,
+    "updated_at": "2023-04-22T11:15:00Z",
+    "config_applied": true
   }
 }
 ```

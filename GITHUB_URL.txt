@@ -1,0 +1,4 @@
+Please replace this text with your GitHub repository URL, for example:
+https://github.com/yourusername/viewzenix.git
+
+Then share the file back with me and I'll set up the remote correctly. 
