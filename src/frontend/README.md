@@ -1,29 +1,28 @@
 # Viewzenix Frontend
 
-This directory contains the frontend application for Viewzenix, built with React and TypeScript.
+This directory contains the frontend application for Viewzenix, built with React and Next.js.
 
 ## Technology Stack
 
+- **Next.js**: React framework for production
 - **React**: UI library
 - **TypeScript**: Type-safe JavaScript
-- **React Router**: Client-side routing
-- **CSS Modules/Styled Components**: Styling approach
-- **Axios**: HTTP client for API requests
-- **Jest/React Testing Library**: Testing framework
+- **Styled Components**: CSS-in-JS styling
+- **React Icons**: Icon library
 
 ## Directory Structure
 
 ```
 frontend/
 ├── components/       # Reusable UI components
+│   ├── layout/       # Layout components (Layout, Navbar, Sidebar)
+│   └── ui/           # UI components (buttons, cards, etc.)
 ├── hooks/            # Custom React hooks
-├── pages/            # Page components corresponding to routes
+├── pages/            # Next.js pages (routes)
 ├── services/         # API service calls
-├── store/            # State management
-├── styles/           # Global styles, themes, variables
+├── styles/           # Global styles, themes
 ├── types/            # TypeScript interfaces and types
-├── utils/            # Utility functions
-└── tests/            # Frontend-specific test utilities
+└── utils/            # Utility functions
 ```
 
 ## Getting Started
@@ -41,33 +40,25 @@ npm run dev
 
 The application will be available at `http://localhost:3000`.
 
-## Code Conventions
+## Features
 
-- Follow the project's TypeScript standards
-- Use functional components with hooks
-- Place styles in separate CSS module files
-- Include unit tests for all components
-- Follow accessibility best practices
+The dashboard includes the following tabs:
 
-## Testing
-
-```bash
-# Run unit tests
-npm test
-
-# Run with coverage
-npm test -- --coverage
-```
+1. **Webhook Setup**: Configure TradingView alerts with your Viewzenix webhook endpoint
+2. **Brokers**: Configure broker connections and settings
+3. **Bots**: Configure trading bots and automation settings
+4. **Logs**: View system and trading activity logs
+5. **Analytics**: View performance metrics and trading statistics
 
 ## Building for Production
 
 ```bash
-npm run build:frontend
+npm run build
 ```
 
-The production build will be created in the `build` directory.
+The production build will be created in the `.next` directory.
 
-## Design Documentation
+## Design Specifications
 
 UI design specifications are available in `/workspace/Viewzenix/docs/ui/DESIGN_SPECS.md`.
 
